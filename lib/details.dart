@@ -89,7 +89,6 @@ class _DetailsPageState extends State<DetailsPage> {
                   "id_barang": data['id'],
                   "size": selectedSize,
                   "jumlah": 1,
-                  "harga_satuan": data['harga'],
                 }),
               );
               if (responsePost.statusCode == 200) {
@@ -105,7 +104,8 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                 );
               } else {
-                print(responsePost.statusCode);
+                print("STATUS: ${responsePost.statusCode}");
+                print("BODY: ${responsePost.body}");
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("Gagal menambahkan data")),
                 );
@@ -129,7 +129,6 @@ class _DetailsPageState extends State<DetailsPage> {
                   "id_barang": data['id'],
                   "size": selectedSize,
                   "jumlah": 1,
-                  "harga_satuan": data['harga'],
                 }),
               );
               if (responsePost.statusCode == 200) {
@@ -251,7 +250,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               elevation: 4,
                             ),
                             onPressed: () {
-                              postDatabuy();
+                              postDatacart();
                             },
                             child: Icon(Icons.shopping_cart),
                           ),
@@ -268,7 +267,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               foregroundColor: Colors.white,
                             ),
                             onPressed: () {
-                              postDatacart();
+                              postDatabuy();
                             },
                             child: Text(
                               "Buy Now",
