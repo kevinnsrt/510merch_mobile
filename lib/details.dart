@@ -41,18 +41,6 @@ class _DetailsPageState extends State<DetailsPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("Details", style: TextStyle(fontWeight: FontWeight.bold)),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute<void>(
-                builder: (context) => const DashboardPage(),
-              ),
-            );
-            print("tombol logout");
-          },
-          child: Icon(Icons.logout),
-        ),
         backgroundColor: Colors.white,
       ),
       body: FutureBuilder(

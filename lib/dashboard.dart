@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:sio_ecommerce_mobile/cart.dart';
 import 'package:sio_ecommerce_mobile/details.dart';
 import 'package:sio_ecommerce_mobile/login.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,6 @@ class _DashboardPageState extends State<DashboardPage> {
     if (responseIndex.statusCode == 200) {
       return json.decode(responseIndex.body);
     } else {
-
       return CircularProgressIndicator();
     }
   }
@@ -44,7 +44,21 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   Icon(size: 29, color: Colors.white, Icons.notifications),
                   Icon(size: 29, color: Colors.white, Icons.person),
-                  Icon(size: 29, color: Colors.white, Icons.shopping_bag),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) => CartPage(),
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      size: 29,
+                      color: Colors.white,
+                      Icons.shopping_bag,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -104,7 +118,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       borderRadius: BorderRadiusGeometry.circular(12),
                     ),
                     foregroundColor: Color.fromRGBO(39, 39, 39, 1),
-                    backgroundColor: Colors.white
+                    backgroundColor: Colors.white,
                   ),
                   onPressed: () {},
                   child: Text("T-SHIRT"),
@@ -118,7 +132,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       borderRadius: BorderRadiusGeometry.circular(12),
                     ),
                     foregroundColor: Color.fromRGBO(39, 39, 39, 1),
-                    backgroundColor: Colors.white
+                    backgroundColor: Colors.white,
                   ),
                   onPressed: () {},
                   child: Text("LONGSLEEVE"),
@@ -132,7 +146,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       borderRadius: BorderRadiusGeometry.circular(12),
                     ),
                     foregroundColor: Color.fromRGBO(39, 39, 39, 1),
-                    backgroundColor: Colors.white
+                    backgroundColor: Colors.white,
                   ),
                   onPressed: () {},
                   child: Text("HOODIE"),
@@ -146,7 +160,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       borderRadius: BorderRadiusGeometry.circular(12),
                     ),
                     foregroundColor: Color.fromRGBO(39, 39, 39, 1),
-                    backgroundColor: Colors.white
+                    backgroundColor: Colors.white,
                   ),
                   onPressed: () {},
                   child: Text("WORK JACKET"),
@@ -175,9 +189,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
-                            builder: (context) => DetailsPage(
-                              id: item['id'],
-                            ),
+                            builder: (context) => DetailsPage(id: item['id']),
                           ),
                         );
                       },
@@ -189,9 +201,11 @@ class _DashboardPageState extends State<DashboardPage> {
                           elevation: 6,
                           child: Column(
                             children: [
-                              Image.network(item['url_gambar'],
-                              width: 132,
-                              height: 132,),
+                              Image.network(
+                                item['url_gambar'],
+                                width: 132,
+                                height: 132,
+                              ),
                               Text(
                                 item['nama_barang'],
                                 style: TextStyle(fontWeight: FontWeight.bold),
