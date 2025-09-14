@@ -14,6 +14,7 @@ class _CartPageState extends State<CartPage> {
   final int id = 1;
   bool isAll = false;
   List<bool> checked = [];
+  List<int> checkedidKeranjang = [];
 
   @override
   void initState() {
@@ -59,7 +60,18 @@ class _CartPageState extends State<CartPage> {
             final Map<String, dynamic> data =
                 snapshot.data as Map<String, dynamic>;
             final List items = data["0"];
-            final int total = data["total"];
+            int hitungTotal(List items) {
+                        int total = 0;
+                        for (var item in items) {
+                          final int id_keranjang = item['id'];
+                          final int sub_total = item['sub_total'] ?? 0;
+                          if (checkedidKeranjang.contains(id_keranjang)) {
+                            total += sub_total;
+                          }
+                        }
+                        return total;
+            }
+            final int total = hitungTotal(items);
 
             return Column(
               children: [
@@ -95,12 +107,15 @@ class _CartPageState extends State<CartPage> {
                     itemBuilder: (context, index) {
                       final item = items[index];
                       final details = item['details'];
-                      final String nama_barang = details['nama_barang'].toString();
+                      final String nama_barang = details['nama_barang']
+                          .toString();
                       final String size = item['size'].toString();
+                      final int id_barang = item['id_barang'];
+                      final int id_keranjang = item['id'];
                       final String harga = item['harga_satuan'].toString();
-                      final String jumlah = item['jumlah'].toString();
+                      int jumlah = item['jumlah'];
                       final String urlGambar = details['url_gambar'].toString();
-
+                      
 
                       return Column(
                         children: [
@@ -115,8 +130,17 @@ class _CartPageState extends State<CartPage> {
                                   onChanged: (bool? newValue) {
                                     setState(() {
                                       checked[index] = newValue ?? false;
+                                      if (checked[index]) {
+                                        checkedidKeranjang.add(id_keranjang);
+                                      } else {
+                                        checkedidKeranjang.remove(id_keranjang);
+                                      }
                                       isAll = checked.every(
                                         (element) => element == true,
+                                      );
+                                      print("Checked: $checked");
+                                      print(
+                                        "Checked ID Keranjang : $checkedidKeranjang",
                                       );
                                     });
                                   },
@@ -148,21 +172,45 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                 ),
 
-                                SizedBox(width: 56),
+                                SizedBox(width: 50),
 
                                 SizedBox(
                                   width: 38,
                                   height: 23,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      jumlah = jumlah - 1;
+                                      final String urlIncrement =
+                                          'http://172.20.10.5:8000/api/cart/details/update';
+                                      var responseIncrement = await http.post(
+                                        Uri.parse(urlIncrement),
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                          "Accept": "application/json",
+                                        },
+                                        body: jsonEncode({
+                                          "id": id_keranjang,
+                                          "jumlah": jumlah,
+                                        }),
+                                      );
+
+                                      if (responseIncrement.statusCode == 200) {
+                                        setState(() {
+
+                                        });
+                                      }
+                                    },
                                     child: Text("-"),
                                   ),
                                 ),
 
                                 Padding(
-                                  padding: EdgeInsetsGeometry.directional(start: 8,end: 8),
-                                  child: Text(jumlah),
+                                  padding: EdgeInsetsGeometry.directional(
+                                    start: 8,
+                                    end: 8,
+                                  ),
+                                  child: Text("$jumlah"),
                                 ),
                                 SizedBox(
                                   width: 38,
@@ -171,7 +219,26 @@ class _CartPageState extends State<CartPage> {
                                     style: ElevatedButton.styleFrom(
                                       alignment: AlignmentGeometry.center,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      jumlah = jumlah + 1;
+                                      final String urlIncrement =
+                                          'http://172.20.10.5:8000/api/cart/details/update';
+                                      var responseIncrement = await http.post(
+                                        Uri.parse(urlIncrement),
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                          "Accept": "application/json",
+                                        },
+                                        body: jsonEncode({
+                                          "id": id_keranjang,
+                                          "jumlah": jumlah,
+                                        }),
+                                      );
+
+                                      if (responseIncrement.statusCode == 200) {
+                                        setState(() {});
+                                      }
+                                    },
                                     child: Text("+"),
                                   ),
                                 ),
@@ -189,19 +256,35 @@ class _CartPageState extends State<CartPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      
-                      Text("Total Harga: Rp.$total",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
-                      SizedBox(width: 23,),
+                      Text(
+                        "Total Harga: Rp.$total",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(width: 23),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(157, 57),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(16)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(16),
+                          ),
                           backgroundColor: Color.fromRGBO(39, 39, 39, 1),
-                          foregroundColor: Colors.white
+                          foregroundColor: Colors.white,
                         ),
-                        onPressed: (){}, child: Text("Checkout",style: TextStyle(fontSize:16,fontWeight: FontWeight.bold ),)),
+                        onPressed: () {},
+                        child: Text(
+                          "Checkout",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ],
-                  ),)
+                  ),
+                ),
               ],
             );
           } else {
