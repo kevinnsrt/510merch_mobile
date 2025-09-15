@@ -34,7 +34,6 @@ class _CartPageState extends State<CartPage> {
     );
 
     if (responseCart.statusCode == 200) {
-      print(responseCart.body);
       final data = json.decode(responseCart.body) as Map<String, dynamic>;
       final List items = data["0"];
       if (checked.length != items.length) {
@@ -60,17 +59,22 @@ class _CartPageState extends State<CartPage> {
             final Map<String, dynamic> data =
                 snapshot.data as Map<String, dynamic>;
             final List items = data["0"];
+            final List<int> id_keranjang = items
+                .map<int>((item) => item['id'] as int)
+                .toList();
+
             int hitungTotal(List items) {
-                        int total = 0;
-                        for (var item in items) {
-                          final int id_keranjang = item['id'];
-                          final int sub_total = item['sub_total'] ?? 0;
-                          if (checkedidKeranjang.contains(id_keranjang)) {
-                            total += sub_total;
-                          }
-                        }
-                        return total;
+              int total = 0;
+              for (var item in items) {
+                final int id_keranjang = item['id'];
+                final int sub_total = item['sub_total'] ?? 0;
+                if (checkedidKeranjang.contains(id_keranjang)) {
+                  total += sub_total;
+                }
+              }
+              return total;
             }
+
             final int total = hitungTotal(items);
 
             return Column(
@@ -87,6 +91,20 @@ class _CartPageState extends State<CartPage> {
                             for (var i = 0; i < checked.length; i++) {
                               isAll = newValue ?? false;
                               checked[i] = isAll;
+                              if (checked[i]) {
+                                if (checkedidKeranjang.contains(
+                                  id_keranjang[i],
+                                )) {
+                                  print("barang sudah ada di keranjang");
+                                } else {
+                                  checkedidKeranjang.add(id_keranjang[i]);
+                                }
+                              } else {
+                                checkedidKeranjang.remove(id_keranjang[i]);
+                              }
+                              print(
+                                "CHECKED ID KERANJANG : $checkedidKeranjang",
+                              );
                             }
                           });
                         },
@@ -115,7 +133,6 @@ class _CartPageState extends State<CartPage> {
                       final String harga = item['harga_satuan'].toString();
                       int jumlah = item['jumlah'];
                       final String urlGambar = details['url_gambar'].toString();
-                      
 
                       return Column(
                         children: [
@@ -131,7 +148,13 @@ class _CartPageState extends State<CartPage> {
                                     setState(() {
                                       checked[index] = newValue ?? false;
                                       if (checked[index]) {
-                                        checkedidKeranjang.add(id_keranjang);
+                                        if (checkedidKeranjang.contains(
+                                            id_keranjang,
+                                          )) {
+                                            print("barang sudah ada di keranjang");
+                                          } else {
+                                            checkedidKeranjang.add(id_keranjang);
+                                          }
                                       } else {
                                         checkedidKeranjang.remove(id_keranjang);
                                       }
@@ -196,9 +219,7 @@ class _CartPageState extends State<CartPage> {
                                       );
 
                                       if (responseIncrement.statusCode == 200) {
-                                        setState(() {
-
-                                        });
+                                        setState(() {});
                                       }
                                     },
                                     child: Text("-"),
