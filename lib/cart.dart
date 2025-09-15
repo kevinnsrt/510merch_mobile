@@ -83,8 +83,13 @@ class _CartPageState extends State<CartPage> {
                   height: 53,
                   child: Row(
                     children: [
-                      SizedBox(width: 22),
+                      // SizedBox(width: 22),
                       Checkbox(
+                        checkColor: Colors.black,
+                        activeColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(4)
+                        ),
                         value: isAll,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -137,12 +142,14 @@ class _CartPageState extends State<CartPage> {
                       return Column(
                         children: [
                           SizedBox(
-                            width: 365,
+                            width: 385,
                             height: 86,
                             child: Row(
                               children: [
-                                SizedBox(width: 9),
                                 Checkbox(
+                                  checkColor: Colors.black,
+                                  activeColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(4)),
                                   value: checked[index],
                                   onChanged: (bool? newValue) {
                                     setState(() {
@@ -195,13 +202,11 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                 ),
 
-                                SizedBox(width: 50),
-
-                                SizedBox(
-                                  width: 38,
-                                  height: 23,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(),
+                                SizedBox(width: 30),
+                               ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      fixedSize: Size(12, 12),
+                                    ),
                                     onPressed: () async {
                                       jumlah = jumlah - 1;
                                       final String urlIncrement =
@@ -222,9 +227,8 @@ class _CartPageState extends State<CartPage> {
                                         setState(() {});
                                       }
                                     },
-                                    child: Text("-"),
+                                    child: Icon(color:Colors.black,Icons.remove),
                                   ),
-                                ),
 
                                 Padding(
                                   padding: EdgeInsetsGeometry.directional(
@@ -233,12 +237,9 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                   child: Text("$jumlah"),
                                 ),
-                                SizedBox(
-                                  width: 38,
-                                  height: 23,
-                                  child: ElevatedButton(
+                                ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      alignment: AlignmentGeometry.center,
+                                      fixedSize: Size(12, 12)
                                     ),
                                     onPressed: () async {
                                       jumlah = jumlah + 1;
@@ -260,9 +261,10 @@ class _CartPageState extends State<CartPage> {
                                         setState(() {});
                                       }
                                     },
-                                    child: Text("+"),
+                                    child:Icon(
+                                      color: Colors.black,
+                                      Icons.add)
                                   ),
-                                ),
                               ],
                             ),
                           ),
@@ -309,7 +311,7 @@ class _CartPageState extends State<CartPage> {
               ],
             );
           } else {
-            return Text("tidak ada data");
+            return LinearProgressIndicator(color: Colors.black,);
           }
         },
       ),

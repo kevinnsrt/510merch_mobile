@@ -139,12 +139,23 @@ class _DetailsPageState extends State<DetailsPage> {
 
             return ListView.builder(
               itemCount: 1,
-              itemBuilder: (context, index) {
+              itemBuilder: (context, index)  {
                 return Center(
                   child: Column(
                     children: [
                       SizedBox(height: 26),
-                      Image.network(data['url_gambar']),
+                      Image.network(
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(child: CircularProgressIndicator(),);
+                          }
+                        },
+                        errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image)
+                        ,
+                        data['url_gambar'],
+                      ),
                       SizedBox(height: 46),
                       Row(
                         children: [

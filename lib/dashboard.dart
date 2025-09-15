@@ -202,10 +202,23 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: Column(
                             children: [
                               Image.network(
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                    },
+                                errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image),
                                 item['url_gambar'],
+
                                 width: 132,
                                 height: 132,
                               ),
+
                               Text(
                                 item['nama_barang'],
                                 style: TextStyle(fontWeight: FontWeight.bold),
