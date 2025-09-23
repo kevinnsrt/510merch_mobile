@@ -4,6 +4,7 @@ import 'package:sio_ecommerce_mobile/cart.dart';
 import 'package:sio_ecommerce_mobile/details.dart';
 import 'package:sio_ecommerce_mobile/login.dart';
 import 'package:http/http.dart' as http;
+import 'package:sio_ecommerce_mobile/profile.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -43,7 +44,17 @@ class _DashboardPageState extends State<DashboardPage> {
                 spacing: 89,
                 children: [
                   Icon(size: 29, color: Colors.white, Icons.notifications),
-                  Icon(size: 29, color: Colors.white, Icons.person),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) => const ProfilePage(),
+                        ),
+                      );
+                    },
+                    child: Icon(size: 29, color: Colors.white, Icons.person),
+                  ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -202,17 +213,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: Column(
                             children: [
                               Image.network(
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return child;
-                                      } else {
-                                        return Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                    },
-                                errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image),
+
                                 item['url_gambar'],
 
                                 width: 132,

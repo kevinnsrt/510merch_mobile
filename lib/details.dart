@@ -145,15 +145,15 @@ class _DetailsPageState extends State<DetailsPage> {
                     children: [
                       SizedBox(height: 26),
                       Image.network(
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          } else {
-                            return Center(child: CircularProgressIndicator(),);
-                          }
-                        },
-                        errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image)
-                        ,
+                        // loadingBuilder: (context, child, loadingProgress) {
+                        //   if (loadingProgress == null) {
+                        //     return child;
+                        //   } else {
+                        //     return Center(child: CircularProgressIndicator(),);
+                        //   }
+                        // },
+                        // errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image)
+                        // ,
                         data['url_gambar'],
                       ),
                       SizedBox(height: 46),
